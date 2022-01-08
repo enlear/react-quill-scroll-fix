@@ -1,10 +1,10 @@
 import Quill from 'quill';
-import Delta from 'quill-delta';
 import DOMPurify from 'dompurify';
 
 const Clipboard = Quill.import('modules/clipboard');
+const Delta = Quill.import('delta');
 
-export default class CustomClipboard extends Clipboard {
+class CustomClipboard extends Clipboard {
     constructor(quill, options) {
         super(quill, options);
 
@@ -105,18 +105,7 @@ export default class CustomClipboard extends Clipboard {
         delta = this.convert(content);
         if (this.keepSelection) this.quill.setSelection(range.index, delta.length(), Quill.sources.SILENT);
         else this.quill.setSelection(range.index + delta.length(), Quill.sources.SILENT);
-
-        let scrollTop = this.quill.scrollingContainer.scrollTop;
-        this.container.style.top = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0).toString() + 'px';
-        this.container.focus();
-
-        setTimeout(() => {
-            this.quill.selection.update(Quill.sources.SILENT);
-            delta = delta.concat(this.convert()).delete(range.length);
-            this.quill.setSelection(delta.length() - range.length, Quill.sources.SILENT);
-            this.quill.scrollingContainer.scrollTop = scrollTop;
-        }, 1);
-
+        //this.quill.container.scrollIntoView();
         DOMPurify.removeAllHooks();
     }
 
@@ -397,3 +386,6 @@ export default class CustomClipboard extends Clipboard {
         return !!pattern.test(str);
     }
 }
+
+Quill.register('modules/clipboard', CustomClipboard, true);
+export default CustomClipboard;
