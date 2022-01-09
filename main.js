@@ -90,7 +90,7 @@ class CustomClipboard extends Clipboard {
             const image = file.getAsFile()
             const reader = new FileReader()
             reader.onload = (e) => {
-                this.quill.insertEmbed(range.index, 'image', e.target.result)
+                // this.quill.insertEmbed(range.index, 'image', e.target.result)
                 // if required, manually update the selection after the file loads
                 if (!this.keepSelection) this.quill.setSelection(range.index + 1)
             }
